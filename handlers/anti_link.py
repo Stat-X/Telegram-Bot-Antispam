@@ -1,4 +1,10 @@
+import os
+from dotenv import load_dotenv
 from aiogram import F, Router, types
+
+load_dotenv()
+
+ADMIN=os.getenv('ADMIN')
 
 router = Router()
 
@@ -17,7 +23,7 @@ router = Router()
 )
 async def handle_links(message: types.Message):
     
-    if message.from_user.username == 'dddos_1107':
+    if message.from_user.username == ADMIN:
         return
     
     print('Я побачив посилання!')

@@ -8,7 +8,7 @@ async def create_db():
             CREATE TABLE IF NOT EXISTS users (
                 user_id INTEGER PRIMARY KEY, 
                 username TEXT,
-                invitor_id INTEGER
+                invitor_id INTEGER,
                 invite_counts INTEGER DEFAULT 0,
                 posts INTEGER DEFAULT 0,
                 created_at TEXT DEFAULT (date('now'))  
