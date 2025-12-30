@@ -1,7 +1,7 @@
 import os
 import asyncio
 from dotenv import load_dotenv
-from aiogram import Bot, Dispatcher, Router, types
+from aiogram import Bot, Dispatcher
 from handlers import welcome_router, echo_router, link_router
 from database import create_db
 
