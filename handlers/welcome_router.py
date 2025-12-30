@@ -1,4 +1,4 @@
-import asyncio
+# import asyncio
 from aiogram.filters import ChatMemberUpdatedFilter, IS_NOT_MEMBER, IS_MEMBER
 from aiogram import Router
 from aiogram.types import ChatMemberUpdated
