@@ -2,7 +2,7 @@ import os
 import asyncio
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
-from handlers import welcome_router, echo_router, link_router
+from handlers import welcome_router, link_router
 from database import create_db
 
 
@@ -18,7 +18,6 @@ async def main():
     await create_db()
     dp.include_router(link_router)
     dp.include_router(welcome_router)
-    dp.include_router(echo_router)
     await dp.start_polling(bot)
     
     
