@@ -1,6 +1,9 @@
+import os
 import aiosqlite
+from dotenv import load_dotenv
+load_dotenv()
 
-DB_PATH = 'database/users.db'
+DB_PATH = os.getenv('DB_PATH')
 
 async def create_db():
     async with aiosqlite.connect(DB_PATH) as db:
