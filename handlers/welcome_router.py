@@ -2,8 +2,8 @@
 from aiogram.filters import ChatMemberUpdatedFilter, IS_NOT_MEMBER, IS_MEMBER
 from aiogram import Router
 from aiogram.types import ChatMemberUpdated
-from database import add_user
-from database import is_in_db
+from database import add_user, is_in_db, invite_is_valid_to_count
+
 
 router = Router()
 
@@ -12,6 +12,11 @@ router = Router()
 async def greet_new_member(event: ChatMemberUpdated):
     user = event.new_chat_member.user
     chat_name = event.chat.title
+    
+    if await invite_is_valid_to_count(event=event):
+        await event.answer('This invite was valid')
+    else:
+        await event.answer("This invite is not valid")
     
     if not await is_in_db(user_id=user.id):
         await event.answer(
