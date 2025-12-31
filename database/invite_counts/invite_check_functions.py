@@ -34,7 +34,7 @@ async def invite_is_valid_to_count(event: ChatMemberUpdated):
     if member.status in not_count_invite_from:
         await event.answer('Admin added')
         return False
-    
+    await event.answer(f"Inviter {event.from_user.username}")
     return True
     
    

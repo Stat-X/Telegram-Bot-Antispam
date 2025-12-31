@@ -1,11 +1,14 @@
 from database.create_db import create_db, add_user, DB_PATH
 from database.is_already_in_db_check import is_in_db
 from database.invite_counts.invite_check_functions import invite_is_valid_to_count
+from database.invite_counts.add_invites_for_user import plus_one_to_ivites_of_inviter
+
 
 __all__ = [
     "create_db",
     "add_user",
     "DB_PATH",
     "is_in_db",
-    "invite_is_valid_to_count"  
+    "invite_is_valid_to_count",
+    "plus_one_to_ivites_of_inviter"
 ]
