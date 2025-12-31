@@ -30,16 +30,18 @@ async def invite_is_valid_to_count(event: ChatMemberUpdated):
         return False
     
     # 3 invite is valid if it was not an invite from an admin
-    member = await event.bot.get_chat_member(event.chat.id, inviter_id)
-    if member.status in not_count_invite_from:
+    if await is_admin(event, inviter_id):
         await event.answer('Admin added')
         return False
+    
     await event.answer(f"Inviter {event.from_user.username}")
     return True
     
    
-  
-    
+async def is_admin(event, user_id):
+    member = await event.bot.get_chat_member(event.chat.id, user_id)
+    if member.status in not_count_invite_from:
+        return True
     
  
     

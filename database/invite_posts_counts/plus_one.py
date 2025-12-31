@@ -2,6 +2,10 @@ import aiosqlite
 from database import is_in_db, add_user, DB_PATH
 from aiogram.types import ChatMemberUpdated
 
+# from filelock import FileLock
+
+
+# file_lock = FileLock("db.sqlite.lock")
 
 async def plus_one_to_ivites_of_inviter(event: ChatMemberUpdated):
     inviter = event.from_user
@@ -25,4 +29,19 @@ async def plus_one_invite(inviter_id):
                         )
         await db.commit()
         print(str(inviter_id) + " Inviter got 1")
+
+
+async def plus_one_post(user_id):
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute("""
+                                UPDATE 
+                                    users 
+                                SET 
+                                    posts = posts + 1 
+                                WHERE user_id = ?
+                            """,        
+                            (user_id,)            
+                            )
+        await db.commit()
+
 

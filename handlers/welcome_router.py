@@ -18,7 +18,7 @@ async def greet_new_member(event: ChatMemberUpdated):
         await event.answer('This invite was valid')
         
     else:
-        # await event.answer("This invite is not valid")
+        await event.answer("This invite is not valid")
         pass
     
     if not await is_in_db(user_id=user.id):

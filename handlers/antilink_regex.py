@@ -15,8 +15,8 @@ LINK_REGEX = re.compile(
     r'\b\d{1,3}(?:\.\d{1,3}){3}\b'
     r'|'
     # SMS or TEL links with optional +
-    r'(?:sms|tel):\+?\d+'
-    r'|'
+    # r'(?:sms|tel):\+?\d+'
+    # r'|'
     # tg:// links
     r'tg://[^\s]+'
     r')',
