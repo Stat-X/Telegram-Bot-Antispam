@@ -2,7 +2,7 @@
 from aiogram.filters import ChatMemberUpdatedFilter, IS_NOT_MEMBER, IS_MEMBER
 from aiogram import Router
 from aiogram.types import ChatMemberUpdated
-from database import add_user, is_in_db, invite_is_valid_to_count, plus_one_to_ivites_of_inviter
+from database import add_user, is_in_db, invite_is_valid_to_count, plus_one_to_ivites_of_inviter, add_user_posts_invites
 
 
 router = Router()
@@ -29,6 +29,7 @@ async def greet_new_member(event: ChatMemberUpdated):
         )
         
         await add_user(user_id=user.id, username=user.username)
+        await add_user_posts_invites(user_id=user.id)
         
     else:
         await event.answer(

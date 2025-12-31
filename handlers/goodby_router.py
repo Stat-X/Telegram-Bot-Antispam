@@ -1,7 +1,7 @@
 from aiogram.filters import ChatMemberUpdatedFilter, IS_NOT_MEMBER, IS_MEMBER
 from aiogram import Router
 from aiogram.types import ChatMemberUpdated
-from database import add_user
+from database import add_user, add_user_posts_invites
 from database import is_in_db
 
 router = Router()
@@ -20,4 +20,5 @@ async def goodby_user(event: ChatMemberUpdated):
     
     if not await is_in_db(user_id):
         await add_user(user_id=user_id, username=username)
+        await add_user_posts_invites(user_id=user_id)
     

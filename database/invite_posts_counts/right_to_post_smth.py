@@ -1,70 +1,51 @@
 import aiosqlite
-from database import DB_PATH, INVITES_TO_POST
+from database import DB_PATH, DB_POST_INVITES_PATH, INVITES_TO_POST
 
 
 async def user_can_post(user_id):
-    invited, posts = await invited_and_posts(userd_id=user_id)
+    invited = await invited_by_user(user_id=user_id)
+    posts = await posts_of_user(user_id=user_id)
     post_may_do = invited//INVITES_TO_POST  
     return post_may_do > posts
 
 
-async def invited_and_posts(userd_id):
+async def invited_by_user(user_id):
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute("""
                               SELECT
-                                invite_counts,
-                                posts 
+                                invite_counts 
                               FROM 
                                 users 
                               WHERE 
-                                user_id = ?;""", (userd_id,)
+                                user_id = ?;""", (user_id,)
                             ) as cursor:
             
             result = await cursor.fetchone()
             
             if result:
-                invited, posts = result  
-                return invited, posts
-            return 0, 0  
+                invited = result[0] 
+                return invited
+            return 0
+
+
+async def posts_of_user(user_id):
+    async with aiosqlite.connect(DB_POST_INVITES_PATH) as db:
+        async with db.execute("""
+                              SELECT
+                                posts 
+                              FROM 
+                                post_invites 
+                              WHERE 
+                                user_id = ?;""", (user_id,)
+                            ) as cursor:
+            
+            result = await cursor.fetchone()
+            
+            if result:
+                posts = result[0] 
+                return posts
+            return 0
 
 
 
 
-
-
-
-from filelock import FileLock
-import aiosqlite
-
-DB_PATH = DB_PATH
-INVITES_TO_POST = 3  # твоя константа
-file_lock = FileLock("db.sqlite.lock")
-
-async def check_and_plus_one_post(user_id: int) -> bool:
-    """
-    Перевіряє, чи користувач може зробити пост,
-    і одразу збільшує лічильник постів, якщо можна.
-    Повертає True, якщо пост дозволено, False — якщо ні.
-    """
-    with file_lock:  # блокування для всіх процесів
-        async with aiosqlite.connect(DB_PATH) as db:
-            # 1️⃣ SELECT
-            async with db.execute(
-                "SELECT invite_counts, posts FROM users WHERE user_id = ?",
-                (user_id,)
-            ) as cursor:
-                result = await cursor.fetchone()
-                invited, posts = result if result else (0, 0)
-
-            # 2️⃣ Перевірка права
-            post_may_do = invited // INVITES_TO_POST
-            if post_may_do > posts:
-                # 3️⃣ UPDATE
-                await db.execute(
-                    "UPDATE users SET posts = posts + 1 WHERE user_id = ?",
-                    (user_id,)
-                )
-                await db.commit()
-                return True
-
-            return False

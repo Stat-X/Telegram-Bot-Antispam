@@ -1,11 +1,8 @@
 import aiosqlite
-from database import is_in_db, add_user, DB_PATH
+from database import is_in_db, add_user, DB_PATH, DB_POST_INVITES_PATH, add_user_posts_invites
 from aiogram.types import ChatMemberUpdated
 
-# from filelock import FileLock
 
-
-# file_lock = FileLock("db.sqlite.lock")
 
 async def plus_one_to_ivites_of_inviter(event: ChatMemberUpdated):
     inviter = event.from_user
@@ -14,8 +11,8 @@ async def plus_one_to_ivites_of_inviter(event: ChatMemberUpdated):
         await add_user(user_id=inviter.id, username=inviter.username)
     
     await plus_one_invite(inviter_id=inviter.id)
-
-
+    
+    
 async def plus_one_invite(inviter_id):
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute("""
@@ -32,10 +29,10 @@ async def plus_one_invite(inviter_id):
 
 
 async def plus_one_post(user_id):
-    async with aiosqlite.connect(DB_PATH) as db:
+    async with aiosqlite.connect(DB_POST_INVITES_PATH) as db:
         await db.execute("""
                                 UPDATE 
-                                    users 
+                                    post_invites 
                                 SET 
                                     posts = posts + 1 
                                 WHERE user_id = ?
@@ -45,3 +42,15 @@ async def plus_one_post(user_id):
         await db.commit()
 
 
+
+
+
+
+
+async def plus_one_to_ivites_of_inviter_in_special_db(event: ChatMemberUpdated):
+    inviter = event.from_user
+    
+    if not await is_in_db(inviter.id):
+        await add_user_posts_invites(user_id=inviter.id)
+    
+    await plus_one_invite(inviter_id=inviter.id)

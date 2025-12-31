@@ -25,14 +25,14 @@ async def invite_is_valid_to_count(event: ChatMemberUpdated):
         return False 
     
     # 2  invite is valid if the user was not in db before the invite
-    if await is_in_db(joined_user.id):
-        await event.answer('Already in DB')
-        return False
+    # if await is_in_db(joined_user.id):
+    #     await event.answer('Already in DB')
+    #     return False
     
     # 3 invite is valid if it was not an invite from an admin
-    if await is_admin(event, inviter_id):
-        await event.answer('Admin added')
-        return False
+    # if await is_admin(event, inviter_id):
+    #     await event.answer('Admin added')
+    #     return False
     
     await event.answer(f"Inviter {event.from_user.username}")
     return True
