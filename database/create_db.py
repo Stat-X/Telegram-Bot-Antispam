@@ -1,56 +1,38 @@
 import os
 import aiosqlite
-
 from dotenv import load_dotenv
+
+from texts_to_use import (
+                          CREATE_DB_FOR_POSTS,
+                          CREATE_DB_FOR_USERS, 
+                          SQL_INSERT_USER_IN_DB_USERS,
+                          SQL_INSERT_USER_IN_DB_POSTS
+                        )
 load_dotenv()
 
 DB_PATH = os.getenv('DB_PATH')
-DB_POST_INVITES_PATH = os.getenv('DB_POST_INVITES_PATH')
+DB_POST_PATH = os.getenv('DB_POST_PATH')
 
 async def create_db():
     async with aiosqlite.connect(DB_PATH) as db:
-        await db.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                user_id INTEGER PRIMARY KEY, 
-                username TEXT,
-                invitor_id INTEGER,
-                invite_counts INTEGER DEFAULT 0,
-                posts INTEGER DEFAULT 0,
-                created_at TEXT DEFAULT (date('now'))  
-            ) 
-            """
-        )
+        await db.execute(CREATE_DB_FOR_USERS)
         await db.commit()
 
 
 async def add_user(user_id, username):
     async with aiosqlite.connect(DB_PATH) as db:
-        await db.execute(
-            "INSERT OR IGNORE INTO users (user_id, username) VALUES (?, ?)",
-            (user_id, username) 
-        )
+        await db.execute(SQL_INSERT_USER_IN_DB_USERS,(user_id, username))
         await db.commit()
 
         
-
-async def create_db_of_invites_and_posts():
-    async with aiosqlite.connect(DB_POST_INVITES_PATH) as db:
-        await db.execute("""
-            CREATE TABLE IF NOT EXISTS post_invites (
-                user_id INTEGER PRIMARY KEY, 
-                posts INTEGER DEFAULT 0
-            ) 
-            """
-        )
+async def create_db_posts():
+    async with aiosqlite.connect(DB_POST_PATH) as db:
+        await db.execute(CREATE_DB_FOR_POSTS)
         await db.commit()
 
 
-
-async def add_user_posts_invites(user_id):
-    async with aiosqlite.connect(DB_POST_INVITES_PATH) as db:
-        await db.execute(
-            "INSERT OR IGNORE INTO post_invites (user_id) VALUES (?)",
-            (user_id,) 
-        )
+async def add_user_posts(user_id):
+    async with aiosqlite.connect(DB_POST_PATH) as db:
+        await db.execute(SQL_INSERT_USER_IN_DB_POSTS, (user_id,))
         await db.commit()
         
