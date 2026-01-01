@@ -1,56 +1,56 @@
-# import os
-# from google import genai
-# from dotenv import load_dotenv
+import os
+from openai import OpenAI
+from dotenv import load_dotenv
+import asyncio
 
-# load_dotenv()
+load_dotenv()
 
-# API_KEY=os.getenv("API_KEY_GEMINI")
+API_KEY=os.getenv("API_OPEN_AI")
 
-# client = genai.Client(api_key=API_KEY)
-
-# msg="""
-# Закупівля:
-# Горох 🫘
-# Нішеві зернові 🌿
-# Кукурудза 🌽
-# Соняшник 🌻
-# Ріпак 🌱
-# Соя 🍃
-# Пшениця 🌾
-# Жито ☘
-# Шрот та макуха, олія 🥃
-# Умови постачання: FCA, DAP, CPT.
-# Олійні та зернові, продукти переробки, тверде паливо, добрива, логістика, хімічна галузь, фрукти й овочі, морожені та сушені снеки.
-# Прості умови сплати, за контрактами.
-# Об'єми:
-# 500-1000тн.
-# Від брокера. 
-# Повні данні, база: оновлення.
-# 2025рік Експорт+Імпорт 1, 2, 3й міс.
-# 2024рік Імпорт з 1го по 12й міс.
-# 2024рік Експорт оновлення з 1 по 5 та з 8го по 9й міс. Ви знаходите для розвитку бізнесу: актуальні контакти отримувачів в ЄС, та по всьому світу. Пошук та виявлення внутрішніх покупок - продажів, по конкуренту ПК-ПЗ вхід, вихід.
-# Тел.: +380500781928
-# """
-
-# promt_text="""You are a moderator in the telegram chat.
-# Your task it to determine wether the message is an advertisment. 
-# Your response must be 1 if this is an advertisment or 0 if not. Message: """
-
-# promt=promt_text+msg
-
-# response = client.models.generate_content(
-#     model='gemini-2.0-flash-lite', contents=promt
-# )
-
-# print(response)
+client = OpenAI(api_key=API_KEY)
 
 
-async def is_advertisment(text):
-    if (
-        "ПРОДАМ" in text
-        or "грн." in text
-        or "тел." in text
-        or "наш сайт" in text
-    ):
-        return True
-    return False
+async def is_advertisement(text: str) -> bool:
+    
+    prompt = f"""
+    You are a moderator in a chat.
+
+Your task is to detect whether the message is a REAL commercial advertisement.
+
+Classify the message as 1 ONLY if it clearly contains at least one of the following:
+- An offer to sell, buy, rent, promote, or advertise goods or services.
+- A business or commercial proposal.
+- A price, quantity, delivery terms, payment terms, or a call to contact for business.
+- Contact information (phone, email, website, Telegram, WhatsApp, etc.) together with a commercial offer.
+- Phrases like: "for sale", "selling", "buy", "we offer", "available", "order now", "delivery", "wholesale", "retail", "price", "discount", "contact us", etc.
+
+Classify the message as 0 if:
+- It is a greeting, casual conversation, or personal message.
+- It is a question, discussion, or opinion without a commercial intent.
+- It is news, announcements, or information not trying to sell or promote something.
+- It is spam, jokes, or unrelated text with no business intent.
+
+Important:
+- The presence of a product name alone is NOT enough to be an advertisement.
+- The presence of a phone number or link alone is NOT enough — it must be tied to a commercial offer.
+- Classify as 1 ONLY when there is a clear commercial intent.
+
+
+Output ONLY one digit: 1 or 0.
+
+    Text:
+    {text}
+    """
+    
+    loop = asyncio.get_running_loop()
+    response = await loop.run_in_executor(
+        None,
+        lambda: client.responses.create(
+            model="gpt-5-nano",
+            input=prompt
+        )
+    )
+    return bool(int(response.output_text.strip()))
+
+
+

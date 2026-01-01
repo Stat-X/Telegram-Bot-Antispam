@@ -30,15 +30,8 @@ async def add_user(user_id, username):
             (user_id, username) 
         )
         await db.commit()
-        print('User Inserted into USERS')
+
         
-
-
-
-
-
-
-
 
 async def create_db_of_invites_and_posts():
     async with aiosqlite.connect(DB_POST_INVITES_PATH) as db:
@@ -60,4 +53,4 @@ async def add_user_posts_invites(user_id):
             (user_id,) 
         )
         await db.commit()
-        print('User Inserted into INVITED POSTS')
+        
