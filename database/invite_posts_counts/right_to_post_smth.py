@@ -1,6 +1,7 @@
 import aiosqlite
-from database     import DB_PATH, DB_POST_PATH, INVITES_TO_POST
-from texts_to_use import SQL_INVITES_COUNT, SQL_POST_COUNT
+from texts_to_use   import SQL_INVITES_COUNT, SQL_POST_COUNT
+from env_collection import DB_PATH, DB_POST_PATH, INVITES_TO_POST
+
 
 
 async def user_can_post(user_id):

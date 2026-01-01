@@ -1,6 +1,7 @@
 import aiosqlite
-from database     import DB_PATH
-from texts_to_use import SQL_IS_IN_DB_CHECK
+from texts_to_use   import SQL_IS_IN_DB_CHECK
+from env_collection import DB_PATH
+
 
 
 async def is_in_db(user_id):

@@ -4,6 +4,7 @@ model.py
 test_of_db.ipynb
 clear_db.py
 test.py
+tree.py
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -11,6 +12,9 @@ test.py
 # Environments
 .env
 .venv
+
+#DB
+*.db
 
 
 

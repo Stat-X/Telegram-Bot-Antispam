@@ -1,17 +1,14 @@
-import os
 import aiosqlite
-from dotenv import load_dotenv
+from texts_to_use   import (
+                            CREATE_DB_FOR_POSTS,
+                            CREATE_DB_FOR_USERS, 
+                            SQL_INSERT_USER_IN_DB_USERS,
+                            SQL_INSERT_USER_IN_DB_POSTS
+                          )
 
-from texts_to_use import (
-                          CREATE_DB_FOR_POSTS,
-                          CREATE_DB_FOR_USERS, 
-                          SQL_INSERT_USER_IN_DB_USERS,
-                          SQL_INSERT_USER_IN_DB_POSTS
-                        )
-load_dotenv()
+from env_collection import DB_PATH, DB_POST_PATH
 
-DB_PATH = os.getenv('DB_PATH')
-DB_POST_PATH = os.getenv('DB_POST_PATH')
+
 
 async def create_db():
     async with aiosqlite.connect(DB_PATH) as db:

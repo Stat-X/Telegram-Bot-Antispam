@@ -1,14 +1,11 @@
 import os
 import asyncio
 from openai import OpenAI
-from dotenv import load_dotenv
+from env_collection import API_OPEN_AI
 
 
-load_dotenv()
 
-API_KEY=os.getenv("API_OPEN_AI")
-
-client = OpenAI(api_key=API_KEY)
+client = OpenAI(api_key=API_OPEN_AI)
 
 async def is_advertisement(text: str, prompt: str) -> bool:
     

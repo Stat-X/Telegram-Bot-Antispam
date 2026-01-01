@@ -1,5 +1,5 @@
 from aiogram  import types
-from database import is_admin, plus_one_post
+from database import plus_one_post
 from handlers.scaner_advertisement.model_setting     import is_advertisement
 from database.invite_posts_counts.right_to_post_smth import user_can_post 
 
