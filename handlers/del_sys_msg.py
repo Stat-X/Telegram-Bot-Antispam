@@ -9,3 +9,12 @@ async def delete_system_join(message: Message):
         await message.delete()
     except Exception:
         pass
+    
+router_ = Router()
+
+@router.message(F.chat.type == "private")
+async def block_private_messages(message: Message):
+    try:
+        await message.delete()
+    except Exception:
+        pass
