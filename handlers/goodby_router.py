@@ -1,9 +1,13 @@
+import asyncio
 from aiogram.filters import ChatMemberUpdatedFilter, IS_NOT_MEMBER, IS_MEMBER
 from aiogram         import Router
 from aiogram.types   import ChatMemberUpdated
 from database        import add_user, add_user_posts
 from database        import is_in_db
 from texts_to_use    import GOODBY_MESSAGE
+from env_collection  import TIME_BEFORE_DELETING_FAREWELL_MSG
+
+from handlers.msg_deleter import delete_after
 
 router = Router()
 
@@ -14,7 +18,9 @@ async def goodby_user(event: ChatMemberUpdated):
     user_id = user.id
     username = user.username
     
-    await event.answer(GOODBY_MESSAGE.format(first_name=user.first_name))
+    msg = await event.answer(GOODBY_MESSAGE.format(first_name=user.first_name))
+    
+    asyncio.create_task(delete_after(msg=msg, delay=TIME_BEFORE_DELETING_FAREWELL_MSG))
     
     if not await is_in_db(user_id):
         await add_user(user_id=user_id, username=username)
