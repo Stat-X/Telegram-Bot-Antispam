@@ -16,8 +16,7 @@ tree.py
 #DB
 *.db
 
-#txt
-Procfile.txt
+
 
 
 
