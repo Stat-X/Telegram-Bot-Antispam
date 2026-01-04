@@ -9,7 +9,7 @@ not_count_invite_from = {ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.CREATO
 
 async def invite_is_valid_to_count(event: ChatMemberUpdated):
     
-    #if no inviter - automatically invalid to count this as an invite
+    #if no inviter - automatically invalid to count this as an invitation
     inviter = event.from_user
     
     if not inviter:
@@ -26,7 +26,7 @@ async def invite_is_valid_to_count(event: ChatMemberUpdated):
     if await is_in_db(joined_user.id):
         return False
     
-    # 3 invite is valid if it was not an invite from an admin
+    # 3 invite is valid if it was not an invitation from an admin
     if await is_admin(event, inviter_id):
         return False
     
